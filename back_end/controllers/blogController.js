@@ -12,7 +12,7 @@ const allBlogFind = async (req, res) => {
     try {
         const { category } = req.body
         let allblog
-        console.log("kkkkkkkkkkkkkk;;;;;;;;;;;;;;;;;;;;;;;;", category)
+       
         if (category === "all") { allblog = await Post.find({}).populate() }
         else { allblog = await Post.find({ category }).populate("createByUser", "username", "email", "_id") }
         res.status(200).send({ allblog, msg: "true" });
