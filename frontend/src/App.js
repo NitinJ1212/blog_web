@@ -16,6 +16,7 @@ import Editblog from './admin/Editblog';
 import Webcontent from './admin/Webcontent';
 import Footer from './Footer-Header/Footer';
 import Layout from './layout/Layout';
+import AddCatagory from './admin/AddCatagory';
 
 function App() {
   const [loginuser, setloginuser] = useState();
@@ -48,6 +49,8 @@ function App() {
               <Route path="commenttrack" element={<Commenttrack />} />
               <Route path="webcontent" element={<Webcontent />} />
               <Route path="editblog" element={<Editblog />} />
+              <Route path="addcatagory" element={<AddCatagory />} />
+              
             </Route>
           </Routes></Layout>
       </Router>

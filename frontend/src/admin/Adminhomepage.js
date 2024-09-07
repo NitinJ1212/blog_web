@@ -56,6 +56,14 @@ const Adminhomepage = () => {
               Edit Blog
             </NavLink>
           </li>
+          <li>
+            <NavLink 
+              to="/admin/addcatagory" 
+              className={({ isActive }) => isActive ? "active" : ""}
+            >
+              Edit Blog
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </div>

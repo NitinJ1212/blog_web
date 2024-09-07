@@ -77,3 +77,39 @@ return response.data;
     }
 }
 
+export const addcatagory = async(data)=>{
+  const {catagory}=data
+  try {
+      const response = await axios.post(
+        'http://localhost:5002/blogapi/blog/addcatagory',
+        {catagory},
+      
+      );
+return response.data;
+     
+
+      // You can perform further actions after successful registration here
+
+    } catch (error) {
+      console.error('Registration failed:', error);
+      // Handle error (e.g., display an error message to the user)
+    }
+}
+
+export const getcatagory = async()=>{
+
+  try {
+      const response = await axios.get(
+        'http://localhost:5002/blogapi/blog/getcatagory',
+       
+      );
+return response.data;
+     
+
+      // You can perform further actions after successful registration here
+
+    } catch (error) {
+      console.error('Registration failed:', error);
+      // Handle error (e.g., display an error message to the user)
+    }
+}
