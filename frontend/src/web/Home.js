@@ -17,8 +17,8 @@ const Home = () => {
 
 
         <HomePageCard />
-        <ImagesGallery/>
-        <VideosGallery/>
+        <ImagesGallery />
+        <VideosGallery />
       </div>
     </>
   )

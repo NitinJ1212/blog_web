@@ -15,11 +15,11 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-  
-  const uploadStorage = multer({ storage: storage })
+
+const uploadStorage = multer({ storage: storage })
 
 router.post('/addImage', uploadStorage.single("file"), blogController.addBlogImage);
-router.post('/allblog', blogController.allBlogFind);
+router.post('/allblog', verifyToken, blogController.allBlogFind);
 router.post('/addblog', verifyToken, blogController.addBlog);
 router.post('/blogById', blogController.blogById);
 

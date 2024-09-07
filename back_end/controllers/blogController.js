@@ -10,11 +10,11 @@ const fs = require('fs');
 
 const allBlogFind = async (req, res) => {
     try {
-        const category = req.body.data
+        const { category } = req.body
         let allblog
-        console.log("kkkkkkkkkkkkkk;;;;;;;;;;;;;;;;;;;;;;;;")
-        if (category === "all") { allblog = await Blog.find({}).populate("createByUser", "username email -_id") }
-        else { allblog = await Blog.find({ category }).populate("createByUser", "username email -_id") }
+        console.log("kkkkkkkkkkkkkk;;;;;;;;;;;;;;;;;;;;;;;;", category)
+        if (category === "all") { allblog = await Post.find({}).populate() }
+        else { allblog = await Post.find({ category }).populate("createByUser", "username", "email", "_id") }
         res.status(200).send({ allblog, msg: "true" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -22,7 +22,6 @@ const allBlogFind = async (req, res) => {
 };
 
 const addBlog = async (req, res) => {
-    console.log(req.user, "76666666666666666666666");
     try {
         const { user_id, subtitle, title, part, description,
             category,
@@ -30,8 +29,6 @@ const addBlog = async (req, res) => {
         if (!title || !description || !category) {
             res.status(201).send({ msg: false });
         }
-        const src = ""
-
         const newBlog = new Post({
             user: user_id,
             title: title,
@@ -41,17 +38,9 @@ const addBlog = async (req, res) => {
             part,
             category,
             language,
-     
-            // createByUser: req.user._id,
-            // createdAt,
-
         });
-
-     
         const savedUser = await newBlog.save();
-     
-
-        res.status(200).send({ "data": savedUser, status: true });
+        res.status(200).send({ message: "Blog added successfully", status: true });
     } catch (error) {
         console.log("eeeeeeeeeeeee222222222", error);
         res.status(500).json({ error: error.message });
@@ -61,7 +50,6 @@ const addBlog = async (req, res) => {
 const addBlogImage = async (req, res) => {
     try {
         const { _id } = req.body
-     
         const file = req.file;
         if (!file) {
             return res.status(400).json({ error: 'No file uploaded' });
@@ -73,7 +61,6 @@ const addBlogImage = async (req, res) => {
             }
             )
         if (uploadResult) {
-         
             fs.unlinkSync(file.path);
             const exist = Post.findById({ _id: _id })
             if (exist) {
@@ -94,7 +81,7 @@ const addBlogImage = async (req, res) => {
 const blogById = async (req, res) => {
     const { id } = req.body
     try {
-        const allblog = await Blog.findOne({ _id: id }).populate("createByUser", "username email -_id")
+        const allblog = await Post.findOne({ _id: id }).populate("createByUser", "username email -_id")
 
 
 
@@ -118,11 +105,11 @@ const likeBlog = async (req, res) => {
         // if (!userExists) {
         //     return res.status(404).json({ error: 'User not found' });
         // }
-        // const blogExists = await Blog.findOne({ _id: blog_id });
+        // const blogExists = await Post.findOne({ _id: blog_id });
         // if (!blogExists) {
         //     return res.status(404).json({ error: 'Blog not found' });
         // }
-        const Blogsa = await Blog.findOne({ _id: blog_id })
+        const Blogsa = await Post.findOne({ _id: blog_id })
         if (!Blogsa) {
             return res.status(400).send({ status: false, msg: "Blog is not Exist." });
         }

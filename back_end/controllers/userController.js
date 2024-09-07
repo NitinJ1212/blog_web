@@ -11,10 +11,15 @@ const signupUser = async (req, res) => {
     }
 
     const { username, email, password } = req.body;
+<<<<<<< HEAD
     console.log(req.body);
     const finduser = await User.findOne({
       email: email
 
+=======
+    const finduser = await User.findOne({
+      email: email
+>>>>>>> 63641af0b396cbf8ef9660c63ae9037ec339f57c
     })
 
     if (finduser) {
