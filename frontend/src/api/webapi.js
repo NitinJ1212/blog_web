@@ -92,6 +92,29 @@ export const allblog = async (data) => {
   }
 }
 
+export const oneblog = async (data) => {
+
+  try {
+    const response = await axios.post(
+      `${base_url}/blogapi/blogById`,
+      {
+        id: data
+      },
+      header
+    );
+    return response.data;
+
+
+    // You can perform further actions after successful registration here
+
+  } catch (error) {
+    console.error('Registration failed:', error);
+    // Handle error (e.g., display an error message to the user)
+  }
+
+
+
+}
 export const addcatagory = async(data)=>{
   const {catagory}=data
   try {

@@ -26,7 +26,10 @@ router.post('/blogById', blogController.blogById);
 // WORK BY NITIN 
 
 router.post('/setcookie', blogController.setCookie);
-router.post('/blog/like', blogController.likeBlog);
+
 router.post('/blog/addcatagory', blogController.addCatagory);
 router.get('/blog/getcatagory', blogController.getcatagory);
+router.post('/blog/like', blogController.likePost);
+router.post('/blog/unlikePost', blogController.unlikePost);
+router.post('/blog/addComment', blogController.addComment);
 module.exports = router

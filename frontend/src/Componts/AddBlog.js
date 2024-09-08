@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react'
-import { addblog, register } from '../api/webapi'
+import React, { useState,useEffect } from 'react'
+import { addblog, getcatagory, register } from '../api/webapi'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
 const AddBlog = () => {
   const [title, settitle] = useState();
+  const [datacatagory,setdatacatagory]=useState()
   const [data, setData] = useState({
     title: "",
     subtitle: "",
@@ -62,7 +63,18 @@ const AddBlog = () => {
       }
     }
   }
+   
+  const getdatya  = async()=>{
+    getcatagory().then((data)=>{
+        console.log(data?.allcatagory);
+        setdatacatagory(data?.allcatagory)
+    
+    })
+  }
+  useEffect(()=>{
+    getdatya()},
 
+[])
   return (
     <>
       <div className='container'>
@@ -96,10 +108,14 @@ const AddBlog = () => {
         <div className="mb-3">
           <select className="form-select" onChange={handleChange}
             value={data.category} name='category' aria-label="Disabled select example" >
-            <option selected>Category</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+                    <option selected>category</option>
+          {datacatagory && datacatagory?.map((itm)=>{
+            return(
+              <>
+      <option value={itm.catagory}>{itm.catagory}</option>
+              </>
+            )
+          })}
           </select>
         </div>
 
@@ -109,7 +125,7 @@ const AddBlog = () => {
             <option selected>Language</option>
             <option value="1">One</option>
             <option value="2">Two</option>
-            <option value="3">Three</option>
+      
           </select>
         </div>
         {/* <div className="mb-3">
