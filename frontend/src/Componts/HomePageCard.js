@@ -8,10 +8,9 @@ const HomePageCard = ({ data }) => {
     <>
       <div className='text-warning text-center'><h2>Lastest Bolgs</h2></div>
       <div className='container mb-4'>
-
-        <div class="card-group">
+        <div className='row'>
           {data && data?.map(v => (
-            <div class="card mx-2">
+            <div class="card col-md-3">
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Sher_Singh_in_Lahore.jpg/584px-Sher_Singh_in_Lahore.jpg" class="card-img-top" alt="..." />
               <div class="card-body">
                 <h5 class="card-title">"title"</h5>
@@ -20,14 +19,15 @@ const HomePageCard = ({ data }) => {
               <div class="card-footer">
                 <small class="text-muted"><Link
                   to="#"
-
                 >
                   Read More
                 </Link></small>
               </div>
             </div>
           ))}
+        </div>
 
+        <div class="card-group">
           <div class="card mx-2">
             <img src="https://c8.alamy.com/comp/A5AH6K/sikh-troops-dividing-the-spoils-taken-from-mutineers-during-the-indian-A5AH6K.jpg" class="card-img-top" alt="..." />
             <div class="card-body">
