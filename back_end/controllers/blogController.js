@@ -3,10 +3,17 @@ const Post = require('../models/blogModel');
 const User = require('../models/user');
 const {Category} =  require('../models/catagory')
 const cloudinary = require('./cloudinaryConfig')
-
+const mongoose = require('mongoose');
 const fs = require('fs');
 
+const unlikf = async(postId,userId)=>{
+    const post = await Post.findByIdAndUpdate(
+        postId,
+        { $pull: { likes: userId } }, // Use $pull to remove the user ID from the likes array
+        { new: true } // Return the updated document
+    );
 
+}
 
 const allBlogFind = async (req, res) => {
     try {
@@ -79,7 +86,7 @@ const blogById = async (req, res) => {
     const { id } = req.body
     console.log(id);
     try {
-        const allblog = await Post.findOne({ _id: id }).populate("likes", "username email -_id")
+        const allblog = await Post.findOne({ _id: id }).populate("likes", "username email  _id")
         .populate("comments", "username email -_id").populate('comments.user', 'username')
         
 
@@ -179,30 +186,48 @@ const getcatagory = async (req, res) => {
 
 
 // Like a post
+
 const likePost = async (req, res) => {
-   
-    const {userId,postId }= req.body // User ID should be provided in the request body
+  const userId = req.user; // Assuming req.user contains the authenticated user's ID
+  console.log(userId._id); 
+  const { postId } = req.body; // Post ID should be provided in the request body
 
-    if (!postId) {
-        return res.status(400).json({ error: 'Invalid post ID' });
+  if (!postId) {
+    return res.status(400).json({ error: 'Invalid post ID' });
+  }
+
+  // Ensure that the userId is a valid ObjectId
+  
+  try {
+    // Check if the user already liked the post
+    const postExists = await Post.findOne({
+      _id: postId,
+      likes: { $in: [userId] }, // Ensure userId is cast to ObjectId
+    });
+
+    if (postExists) {
+      // If user already liked the post, remove the like (unlike)
+   const data =  await unlikf(postId,userId._id)
+
+      return res.status(200).json({ message: 'Post unliked' ,data});
+    } else {
+      // If user has not liked the post, add the like
+      const updatedPost = await Post.findByIdAndUpdate(
+        postId,
+        { $addToSet: { likes: userId } }, // Use $addToSet to avoid duplicate likes
+        { new: true } // Return the updated document
+      ).populate('likes', 'username email _id');
+
+      if (!updatedPost) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+
+      res.status(200).json({ message: 'Post liked', post: updatedPost });
     }
-
-    try {
-        const post = await Post.findByIdAndUpdate(
-            {_id:postId},
-            { $addToSet: { likes: userId } }, // Use $addToSet to avoid duplicate likes
-            { new: true } // Return the updated document
-        );
-
-        if (!post) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
-
-        res.status(200).json(post);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Server error' });
-    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // Unlike a post
@@ -236,8 +261,10 @@ const unlikePost = async (req, res) => {
 
 // Add a comment to a post
 const addComment = async (req, res) => {
+    const userId = req.user
+    console.log(userId);
   
-    const { userId, text ,postId} = req.body; // User ID and comment text should be provided in the request body
+    const {  text ,postId} = req.body; // User ID and comment text should be provided in the request body
 
     if (!userId || !text) {
         return res.status(400).json({ error: 'User ID and comment text are required' });
@@ -261,7 +288,7 @@ const addComment = async (req, res) => {
             return res.status(404).json({ error: 'Post not found' });
         }
 
-        res.status(200).json(post);
+        res.status(200).send({ post, msg: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });

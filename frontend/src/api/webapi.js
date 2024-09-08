@@ -151,3 +151,41 @@ return response.data;
       // Handle error (e.g., display an error message to the user)
     }
 }
+
+export const addcomment = async(data)=>{
+  const {iduser,text,id}=data
+  try {
+      const response = await axios.post(
+        'http://localhost:5002/blogapi/blog/addComment',
+        {postId:id,text:text},header
+      
+      );
+return response.data;
+     
+
+      // You can perform further actions after successful registration here
+
+    } catch (error) {
+      console.error('Registration failed:', error);
+      // Handle error (e.g., display an error message to the user)
+    }
+}
+
+export const userLike = async(data)=>{
+  const {iduser,text,id}=data
+  try {
+      const response = await axios.post(
+        'http://localhost:5002/blogapi/blog/like',
+        {postId:id},header
+      
+      );
+return response.data;
+     
+
+      // You can perform further actions after successful registration here
+
+    } catch (error) {
+      console.error('Registration failed:', error);
+      // Handle error (e.g., display an error message to the user)
+    }
+}
