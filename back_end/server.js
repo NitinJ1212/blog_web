@@ -15,8 +15,8 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
-const url = 'mongodb://localhost:27017/newtest';
-// const url = 'mongodb+srv://jaspreet98134:1ZMAOfDsmMjhx6I9@cluster0.ngta5oz.mongodb.net/blogtest'
+//const url = 'mongodb://localhost:27017/newtest';
+ const url = 'mongodb+srv://jaspreet98134:1ZMAOfDsmMjhx6I9@cluster0.ngta5oz.mongodb.net/blogtest'
 
 // const url = "mongodb://localhost:27017/example"
 

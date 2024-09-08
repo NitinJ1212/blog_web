@@ -19,14 +19,17 @@ const storage = multer.diskStorage({
 const uploadStorage = multer({ storage: storage })
 
 router.post('/addImage', uploadStorage.single("file"), blogController.addBlogImage);
-router.post('/allblog', verifyToken, blogController.allBlogFind);
+router.post('/allblog', blogController.allBlogFind);
 router.post('/addblog', verifyToken, blogController.addBlog);
 router.post('/blogById', blogController.blogById);
 
 // WORK BY NITIN 
 
 router.post('/setcookie', blogController.setCookie);
-router.post('/blog/like', blogController.likeBlog);
+
 router.post('/blog/addcatagory', blogController.addCatagory);
 router.get('/blog/getcatagory', blogController.getcatagory);
+router.post('/blog/like',verifyToken, blogController.likePost);
+router.post('/blog/unlikePost',verifyToken, blogController.unlikePost);
+router.post('/blog/addComment',verifyToken, blogController.addComment);
 module.exports = router

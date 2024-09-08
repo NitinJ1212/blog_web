@@ -8,7 +8,7 @@ const [email,setemail]=useState()
 const handelrigester =async()=>{
 const data ={username,password,email}
   const res= await register(data)
-  if(res.msg===true){
+  if(res?.msg===true){
     alert("Uesr Resgister successfully")
   }
   console.log(res);

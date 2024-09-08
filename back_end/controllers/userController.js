@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const signupUser = async (req, res) => {
   try {
-
+console.log("hgoijhiuhyojiuhyhy");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // Return validation errors if any
@@ -30,6 +30,7 @@ const signupUser = async (req, res) => {
 
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

@@ -9,11 +9,43 @@ const Editblog = () => {
   }, [])
   const fetchData = async () => {
     const dt = await allblog("all");
-    setData(dt.allblog)
+    setData(dt?.allblog)
+    console.log(dt?.allblog);
   }
+ 
+
+
   return (
     <div>
-      {data && <HomePageCard data={data} />}
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sr No.</th>
+      <th scope="col">Blog Name</th>
+      <th scope="col">Title</th>
+      <th scope="col">Sub Title</th>
+      <th scope="col">Sub Part</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {data && data?.map((itm,idx)=>{
+        return(<>
+         <tr>
+      <th scope="row">{idx+1}</th>
+      <td>{itm.title}</td>
+      <td scope="col">Title</td>
+      <td scope="col">Title</td>
+      <td scope="col">Title</td>
+      <td><button>Delete</button>
+      <button className="mx-2">Edit</button>
+      </td>
+    </tr>
+        </>)
+    })}
+
+  </tbody>
+</table>
     </div>
   )
 }
