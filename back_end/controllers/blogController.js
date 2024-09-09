@@ -116,11 +116,11 @@ const blogById = async (req, res) => {
     const { id } = req.body
     console.log(id);
     try {
-        const allblog = await Post.findOne({ _id: id }).populate("likes", "username email  _id")
-            .populate("comments", "username email -_id").populate('comments.user', 'username')
+        const allblog = await Post.findOne({ _id: id }).populate("likes", "username   _id")
+            .populate("comments", "username -_id").populate('comments.user', 'username')
+        const likes = allblog.likes.map(v => v._id)
 
-
-        res.status(200).send({ allblog, msg: "true" });
+        res.status(200).send({ allblog, msg: "true", likes: likes });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -134,38 +134,19 @@ const likeBlog = async (req, res) => {
         if (!user_id, !blog_id) {
             return res.status(400).send({ status: false, msg: "User id or Blog id  is Missing." });
         }
-        console.log("45555555555555555555555555", blog_id);
-        //!mongoose.Types.ObjectId.isValid(userId)
-        // const userExists = await User.findOne({ _id: user_id });
-        // if (!userExists) {
-        //     return res.status(404).json({ error: 'User not found' });
-        // }
-        // const blogExists = await Post.findOne({ _id: blog_id });
-        // if (!blogExists) {
-        //     return res.status(404).json({ error: 'Blog not found' });
-        // }
         const Blogsa = await Post.findOne({ _id: blog_id })
         if (!Blogsa) {
             return res.status(400).send({ status: false, msg: "Blog is not Exist." });
         }
-        console.log(Blogsa, ":::::::::::::::::::::");
-        // if (Blogs.like.includes(user_id))
-
-        //     res.status(200).send({ status: true, msg: "Blog Like Successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
-    } 77
+    }
 };
 const setCookie = async (req, res) => {
     try {
-        // Accessing cookies sent by the client
         const userLoggedIn = req.cookies;
-        console.log("Cookies received:", userLoggedIn);
-
-        // Setting a new cookie
         res.cookie("set_cookie", "this is setted cookie");
 
-        // Sending response
         res.status(200).json({ data: "allblog", msg: "true" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -238,7 +219,7 @@ const likePost = async (req, res) => {
             // If user already liked the post, remove the like (unlike)
             const data = await unlikf(postId, userId._id)
 
-            return res.status(200).json({ message: 'Post unliked', data });
+            return res.status(200).json({ message: 'Post unliked', data, status: true });
         } else {
             // If user has not liked the post, add the like
             const updatedPost = await Post.findByIdAndUpdate(
@@ -251,7 +232,7 @@ const likePost = async (req, res) => {
                 return res.status(404).json({ error: 'Post not found' });
             }
 
-            res.status(200).json({ message: 'Post liked', post: updatedPost });
+            res.status(200).json({ message: 'Post liked', post: updatedPost, status: true });
         }
     } catch (error) {
         console.log(error);

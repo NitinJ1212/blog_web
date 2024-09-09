@@ -11,6 +11,8 @@ const Login = () => {
     const res = await login(data)
     if (res?.msg === true) {
       localStorage.setItem('token', JSON.stringify(res.token));
+      localStorage.setItem('user_id', res.user_id);
+      localStorage.setItem('user_name', res.username);
       alert("Uesr Login successfully")
       window.location.href = "/blog"
 
