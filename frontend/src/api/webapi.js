@@ -15,7 +15,7 @@ export const register = async (data) => {
   const { username, password, email } = data
   try {
     const response = await axios.post(
-      'http://localhost:5002/api/users',
+      'http://localhost:5002/blogapi/users',
       { username, password, email },
 
     );

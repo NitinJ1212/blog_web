@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
 const uploadStorage = multer({ storage: storage })
 
 router.post('/addImage', uploadStorage.single("file"), blogController.addBlogImage);
+router.post('/upload-form', uploadStorage.single("file"), blogController.uploadForm)
 router.post('/allblog', blogController.allBlogFind);
 router.post('/addblog', verifyToken, blogController.addBlog);
 router.post('/blogById', blogController.blogById);
@@ -32,4 +33,5 @@ router.get('/blog/getcatagory', blogController.getcatagory);
 router.post('/blog/like',verifyToken, blogController.likePost);
 router.post('/blog/unlikePost',verifyToken, blogController.unlikePost);
 router.post('/blog/addComment',verifyToken, blogController.addComment);
+router.post('/blog/deleteComment', blogController.deleteComment);
 module.exports = router

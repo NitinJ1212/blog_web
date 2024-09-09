@@ -1,12 +1,12 @@
 
 const Post = require('../models/blogModel');
 const User = require('../models/user');
-const {Category} =  require('../models/catagory')
+const { Category } = require('../models/catagory')
 const cloudinary = require('./cloudinaryConfig')
 const mongoose = require('mongoose');
 const fs = require('fs');
 
-const unlikf = async(postId,userId)=>{
+const unlikf = async (postId, userId) => {
     const post = await Post.findByIdAndUpdate(
         postId,
         { $pull: { likes: userId } }, // Use $pull to remove the user ID from the likes array
@@ -17,8 +17,8 @@ const unlikf = async(postId,userId)=>{
 
 const allBlogFind = async (req, res) => {
     try {
-  
-        let allblog  = await Post.find({  })
+
+        let allblog = await Post.find({})
         res.status(200).send({ allblog, msg: "true" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -46,7 +46,7 @@ const addBlog = async (req, res) => {
         const savedUser = await newBlog.save();
         res.status(200).send({ message: "Blog added successfully", status: true });
     } catch (error) {
-    
+
         res.status(500).json({ error: error.message });
     }
 };
@@ -81,14 +81,44 @@ const addBlogImage = async (req, res) => {
 
 }
 
+const uploadForm = async (req, res) => {
+    try {
+        const { _id } = req.body
+        const file = req.file;
+        if (!file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+        const uploadResult = await cloudinary.uploader
+            .upload(
+                file.path, {
+                public_id: 'shoes',
+            }
+            )
+        if (uploadResult) {
+            fs.unlinkSync(file.path);
+            // const exist = Post.findById({ _id: _id })
+            // if (exist) {
+            const update = await Post.findByIdAndUpdate(_id, { image: uploadResult.secure_url }, { new: true })
+            // }
+            res.status(200).send({ msg: "file save", status: true });
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred during upload' });
+    }
+
+}
+
 
 const blogById = async (req, res) => {
     const { id } = req.body
     console.log(id);
     try {
         const allblog = await Post.findOne({ _id: id }).populate("likes", "username email  _id")
-        .populate("comments", "username email -_id").populate('comments.user', 'username')
-        
+            .populate("comments", "username email -_id").populate('comments.user', 'username')
+
 
         res.status(200).send({ allblog, msg: "true" });
     } catch (error) {
@@ -175,9 +205,9 @@ const getcatagory = async (req, res) => {
     try {
         const category = req.body.data
         let allcatagory
-        
-       
-        allcatagory = await Category.find({ })
+
+
+        allcatagory = await Category.find({})
         res.status(200).send({ allcatagory, msg: "true" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -188,52 +218,51 @@ const getcatagory = async (req, res) => {
 // Like a post
 
 const likePost = async (req, res) => {
-  const userId = req.user; // Assuming req.user contains the authenticated user's ID
-  console.log(userId._id); 
-  const { postId } = req.body; // Post ID should be provided in the request body
+    const userId = req.user; // Assuming req.user contains the authenticated user's ID
+    const { postId } = req.body; // Post ID should be provided in the request body
 
-  if (!postId) {
-    return res.status(400).json({ error: 'Invalid post ID' });
-  }
-
-  // Ensure that the userId is a valid ObjectId
-  
-  try {
-    // Check if the user already liked the post
-    const postExists = await Post.findOne({
-      _id: postId,
-      likes: { $in: [userId] }, // Ensure userId is cast to ObjectId
-    });
-
-    if (postExists) {
-      // If user already liked the post, remove the like (unlike)
-   const data =  await unlikf(postId,userId._id)
-
-      return res.status(200).json({ message: 'Post unliked' ,data});
-    } else {
-      // If user has not liked the post, add the like
-      const updatedPost = await Post.findByIdAndUpdate(
-        postId,
-        { $addToSet: { likes: userId } }, // Use $addToSet to avoid duplicate likes
-        { new: true } // Return the updated document
-      ).populate('likes', 'username email _id');
-
-      if (!updatedPost) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-
-      res.status(200).json({ message: 'Post liked', post: updatedPost });
+    if (!postId) {
+        return res.status(400).json({ error: 'Invalid post ID' });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Server error' });
-  }
+
+    // Ensure that the userId is a valid ObjectId
+
+    try {
+        // Check if the user already liked the post
+        const postExists = await Post.findOne({
+            _id: postId,
+            likes: { $in: [userId] }, // Ensure userId is cast to ObjectId
+        });
+
+        if (postExists) {
+            // If user already liked the post, remove the like (unlike)
+            const data = await unlikf(postId, userId._id)
+
+            return res.status(200).json({ message: 'Post unliked', data });
+        } else {
+            // If user has not liked the post, add the like
+            const updatedPost = await Post.findByIdAndUpdate(
+                postId,
+                { $addToSet: { likes: userId } }, // Use $addToSet to avoid duplicate likes
+                { new: true } // Return the updated document
+            ).populate('likes', 'username email _id');
+
+            if (!updatedPost) {
+                return res.status(404).json({ error: 'Post not found' });
+            }
+
+            res.status(200).json({ message: 'Post liked', post: updatedPost });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 };
 
 // Unlike a post
 const unlikePost = async (req, res) => {
 
-    const {userId,postId} = req.body// User ID should be provided in the request body
+    const { userId, postId } = req.body// User ID should be provided in the request body
 
     if (!postId) {
         return res.status(400).json({ error: 'Invalid post ID' });
@@ -263,8 +292,8 @@ const unlikePost = async (req, res) => {
 const addComment = async (req, res) => {
     const userId = req.user
     console.log(userId);
-  
-    const {  text ,postId} = req.body; // User ID and comment text should be provided in the request body
+
+    const { text, postId } = req.body; // User ID and comment text should be provided in the request body
 
     if (!userId || !text) {
         return res.status(400).json({ error: 'User ID and comment text are required' });
@@ -296,7 +325,40 @@ const addComment = async (req, res) => {
 };
 
 
+const deleteComment = async (req, res) => {
+    const userId = req.user; // Assuming req.user contains the authenticated user's ID
 
+    const { postId, commentId } = req.body
+    try {
+        // Ensure postId and commentId are valid ObjectIds
+        if (!postId || !commentId) {
+            throw new Error('Invalid postId or commentId');
+        }
+        const post = await Post.findOne(
+            { _id: postId },
+            { comments: { $elemMatch: { _id: commentId } } } // Use $elemMatch to filter comments
+        ).exec();
+
+        if (!post || !post.comments.length) {
+            console.log('Comment not found');
+            return res.status(400).json({ msg: 'Comment not found' });
+        }
+        // Update the Post document to remove the comment
+        const result = await Post.updateOne(
+            { _id: postId }, // Find the post by its _id
+            { $pull: { comments: { _id: commentId } } } // Remove the comment with the specified _id
+        );
+
+        if (result.modifiedCount === 0) {
+            console.log('Comment not found or Post not updated');
+        } else {
+            return res.status(200).json({ msg: 'Comment successfully deleted' });
+
+        }
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+    }
+}
 
 module.exports = {
     allBlogFind,
@@ -305,9 +367,11 @@ module.exports = {
     likeBlog,
     setCookie,
     addBlogImage,
+    uploadForm,
     addCatagory,
     getcatagory,
     likePost,
     unlikePost,
     addComment,
+    deleteComment
 }

@@ -17,6 +17,7 @@ import Webcontent from './admin/Webcontent';
 import Footer from './Footer-Header/Footer';
 import Layout from './layout/Layout';
 import AddCatagory from './admin/AddCatagory';
+import Contactus from './web/Contactus';
 
 function App() {
   const [loginuser, setloginuser] = useState();
@@ -40,6 +41,7 @@ function App() {
             <Route path="/rigester" element={<Rigester />} />
             <Route path="/readMore/:id" element={<Blogid />} />
             <Route path="/addblog" element={<AddBlog />} />
+            <Route path="/contactus" element={<Contactus />} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<Adminhomepage />}>
@@ -50,7 +52,7 @@ function App() {
               <Route path="webcontent" element={<Webcontent />} />
               <Route path="editblog" element={<Editblog />} />
               <Route path="addcatagory" element={<AddCatagory />} />
-              
+
             </Route>
           </Routes></Layout>
       </Router>

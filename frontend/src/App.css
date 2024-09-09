@@ -7,6 +7,14 @@
   pointer-events: none;
 }
 
+
+/* Admin CSS */
+
+.edit_blog_table_header th {
+  font-size: 18px;
+  font-family: DM-Sans;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -22,12 +30,12 @@
   color: rgb(0, 68, 255);
   font-family: sans-serif;
   z-index: 99;
- 
+
 }
 
 @keyframes blinker {
   50% {
-      opacity: 0.9;
+    opacity: 0.9;
   }
 }
 
@@ -50,6 +58,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
