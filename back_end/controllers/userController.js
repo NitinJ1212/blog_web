@@ -1,9 +1,11 @@
 const User = require('../models/user');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+
+
 const signupUser = async (req, res) => {
   try {
-console.log("hgoijhiuhyojiuhyhy");
+    console.log("hgoijhiuhyojiuhyhy");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // Return validation errors if any
@@ -38,7 +40,6 @@ const longin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(401).send('Invalid username or password');
     }
@@ -47,9 +48,8 @@ const longin = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).send('Invalid username or password');
     }
-
-    const token = await user.generateAuthToken()
-    res.status(200).json({ msg: true, token });
+    const token = await user.generateAuthToken();
+    res.status(200).json({ msg: true, token, user_id: user._id, username: user.username });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error logging in');
