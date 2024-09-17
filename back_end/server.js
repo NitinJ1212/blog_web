@@ -6,6 +6,8 @@ var cors = require('cors')
 const port = process.env.port || 5002
 const userRouter = require('./Router/userRouts');
 const blog = require('./Router/blogRouts');
+
+const common = require('./Router/commonRoutes');
 const user = require("./models/user");
 const { Blog } = require("./models/blogModel");
 app.use(express.json());
@@ -15,8 +17,8 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
-const url = 'mongodb://localhost:27017/newtest';
-//  const url = 'mongodb+srv://jaspreet98134:1ZMAOfDsmMjhx6I9@cluster0.ngta5oz.mongodb.net/blogtest'
+// const url = 'mongodb://localhost:27017/newtest';
+const url = 'mongodb+srv://jaspreet98134:1ZMAOfDsmMjhx6I9@cluster0.ngta5oz.mongodb.net/blogtest'
 
 // const url = "mongodb://localhost:27017/example"
 
@@ -47,6 +49,7 @@ app.get('/call', function (req, res) {
 app.use('/api', userRouter);
 
 app.use('/blogapi', blog);
+app.use('/common', common);
 
 
 app.listen(port, () => {

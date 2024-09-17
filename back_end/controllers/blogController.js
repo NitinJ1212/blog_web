@@ -1,5 +1,6 @@
 
 const Post = require('../models/blogModel');
+const UploadImage = require('../models/uplaodFormModel')
 const User = require('../models/user');
 const { Category } = require('../models/catagory')
 const cloudinary = require('./cloudinaryConfig')
@@ -98,9 +99,15 @@ const uploadForm = async (req, res) => {
             fs.unlinkSync(file.path);
             // const exist = Post.findById({ _id: _id })
             // if (exist) {
-            const update = await Post.findByIdAndUpdate(_id, { image: uploadResult.secure_url }, { new: true })
+            const newUpload = new UploadImage({ image: uploadResult.secure_url })
+            const saved = await newUpload.save()
+            // const update = await UploadImage.findByIdAndUpdate({ image: uploadResult.secure_url }, { new: true })
             // }
-            res.status(200).send({ msg: "file save", status: true });
+            if (saved) {
+                res.status(200).send({ msg: "file save", status: true });
+            } else {
+                res.status(400).send({ msg: "Something went Wrong", status: false });
+            }
         }
 
 
@@ -164,17 +171,9 @@ const addCatagory = async (req, res) => {
     try {
         const newCategory = new Category({
             catagory,
-            // If you need to add additional fields in the future, uncomment and use as needed.
-            // createdByUser: req.user ? req.user._id : null,
-            // createdAt: new Date()
         });
 
-        console.log('New category:', newCategory);
-
         const savedCategory = await newCategory.save();
-
-        console.log('Saved category:', savedCategory);
-
         res.status(200).send({ savedCategory, msg: 'Category added successfully' });
     } catch (error) {
         console.error('Error adding category:', error);

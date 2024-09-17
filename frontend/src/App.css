@@ -15,6 +15,16 @@
   font-family: DM-Sans;
 }
 
+.required_text {
+  font-size: 12px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.home_banner {
+  height: 100%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

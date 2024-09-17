@@ -58,7 +58,7 @@ const HomePageCard = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className='text-warning text-center my-4'><h2>Trandin Bolgs</h2></div>
+        <div className='text-warning text-center my-4'><h2>Tranding Bolgs</h2></div>
 
         <div class="card-group">
           <div class="card mx-2">

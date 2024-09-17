@@ -115,77 +115,92 @@ export const oneblog = async (data) => {
 
 
 }
-export const addcatagory = async(data)=>{
-  const {catagory}=data
+export const addcatagory = async (data) => {
+  const { catagory } = data
   try {
-      const response = await axios.post(
-        'http://localhost:5002/blogapi/blog/addcatagory',
-        {catagory},
-      
-      );
-return response.data;
-     
+    const response = await axios.post(
+      'http://localhost:5002/blogapi/blog/addcatagory',
+      { catagory },
 
-      // You can perform further actions after successful registration here
+    );
+    return response.data;
 
-    } catch (error) {
-      console.error('Registration failed:', error);
-      // Handle error (e.g., display an error message to the user)
-    }
+
+    // You can perform further actions after successful registration here
+
+  } catch (error) {
+    console.error('Registration failed:', error);
+    // Handle error (e.g., display an error message to the user)
+  }
 }
 
-export const getcatagory = async()=>{
+export const getcatagory = async () => {
 
   try {
-      const response = await axios.get(
-        'http://localhost:5002/blogapi/blog/getcatagory',
-       
-      );
-return response.data;
-     
+    const response = await axios.get(
+      'http://localhost:5002/blogapi/blog/getcatagory',
 
-      // You can perform further actions after successful registration here
+    );
+    return response.data;
 
-    } catch (error) {
-      console.error('Registration failed:', error);
-      // Handle error (e.g., display an error message to the user)
-    }
+
+    // You can perform further actions after successful registration here
+
+  } catch (error) {
+    console.error('Registration failed:', error);
+    // Handle error (e.g., display an error message to the user)
+  }
 }
 
-export const addcomment = async(data)=>{
-  const {iduser,text,id}=data
+export const addcomment = async (data) => {
+  const { iduser, text, id } = data
   try {
-      const response = await axios.post(
-        'http://localhost:5002/blogapi/blog/addComment',
-        {postId:id,text:text},header
-      
-      );
-return response.data;
-     
+    const response = await axios.post(
+      'http://localhost:5002/blogapi/blog/addComment',
+      { postId: id, text: text }, header
 
-      // You can perform further actions after successful registration here
+    );
+    return response.data;
 
-    } catch (error) {
-      console.error('Registration failed:', error);
-      // Handle error (e.g., display an error message to the user)
-    }
+
+    // You can perform further actions after successful registration here
+
+  } catch (error) {
+    console.error('Registration failed:', error);
+    // Handle error (e.g., display an error message to the user)
+  }
 }
 
-export const userLike = async(data)=>{
-  const {iduser,text,id}=data
+export const userLike = async (data) => {
+  const { iduser, text, id } = data
   try {
-      const response = await axios.post(
-        'http://localhost:5002/blogapi/blog/like',
-        {postId:id},header
-      
-      );
-return response.data;
-     
+    const response = await axios.post(
+      'http://localhost:5002/blogapi/blog/like',
+      { postId: id }, header
 
-      // You can perform further actions after successful registration here
+    );
+    return response.data;
 
-    } catch (error) {
-      console.error('Registration failed:', error);
-      // Handle error (e.g., display an error message to the user)
-    }
+
+    // You can perform further actions after successful registration here
+
+  } catch (error) {
+    console.error('Registration failed:', error);
+    // Handle error (e.g., display an error message to the user)
+  }
+}
+
+
+export const submitQuery = async (data) => {
+  try {
+    const response = await axios.post(
+      'http://localhost:5002/common/contactus',
+      data,
+      header
+
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Registration failed:', error);
+  }
 }
